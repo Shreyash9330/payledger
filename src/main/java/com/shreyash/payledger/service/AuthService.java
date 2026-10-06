@@ -9,21 +9,29 @@ import com.shreyash.payledger.dto.AuthResponse;
 import com.shreyash.payledger.dto.LoginRequest;
 import com.shreyash.payledger.dto.RegisterRequest;
 import com.shreyash.payledger.entity.User;
+import com.shreyash.payledger.entity.Wallet;
 import com.shreyash.payledger.repository.UserRepository;
+import com.shreyash.payledger.repository.WalletRepository;
 import com.shreyash.payledger.security.JwtService;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final WalletRepository walletRepository;
+    
 
-    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtService jwtService,WalletRepository walletRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
+        this.walletRepository=walletRepository;
     }
 
+    @Transactional
     public AuthResponse register(RegisterRequest req) {
         if (userRepository.existsByEmail(req.email())) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email already registered");
@@ -33,6 +41,11 @@ public class AuthService {
         user.setEmail(req.email());
         user.setPasswordHash(passwordEncoder.encode(req.password()));
         userRepository.save(user);
+
+        Wallet wallet = new Wallet();
+        wallet.setUser(user);
+        walletRepository.save(wallet);
+
         return new AuthResponse(jwtService.generateToken(user));
     }
 

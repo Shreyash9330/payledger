@@ -4,8 +4,11 @@ import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
@@ -38,5 +41,23 @@ public class GlobalExceptionHandler {
         log.error("Unexpected error", ex);
         return ResponseEntity.status(500)
                 .body(new ApiError(500, "Something went wrong", null, Instant.now()));
+    }
+    
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ResponseEntity<ApiError> handleMissingHeader(MissingRequestHeaderException ex) {
+        return ResponseEntity.badRequest().body(new ApiError(400,
+                "Missing header: " + ex.getHeaderName(), null, Instant.now()));
+    }
+
+    @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+    public ResponseEntity<ApiError> handleLock(ObjectOptimisticLockingFailureException ex) {
+        return ResponseEntity.status(409).body(new ApiError(409,
+                "Concurrent update, please retry", null, Instant.now()));
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiError> handleIntegrity(DataIntegrityViolationException ex) {
+        return ResponseEntity.status(409).body(new ApiError(409,
+                "Duplicate or conflicting request", null, Instant.now()));
     }
 }

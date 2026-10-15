@@ -6,12 +6,14 @@ import java.util.Map;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import com.shreyash.payledger.dto.ApiError;
 
@@ -59,5 +61,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiError> handleIntegrity(DataIntegrityViolationException ex) {
         return ResponseEntity.status(409).body(new ApiError(409,
                 "Duplicate or conflicting request", null, Instant.now()));
+    }
+    
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiError> handleUnreadable(HttpMessageNotReadableException ex) {
+        return ResponseEntity.badRequest().body(new ApiError(400,
+                "Malformed or missing request body", null, Instant.now()));
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ApiError> handleNotFound(NoResourceFoundException ex) {
+        return ResponseEntity.status(404).body(new ApiError(404,
+                "Endpoint not found", null, Instant.now()));
     }
 }

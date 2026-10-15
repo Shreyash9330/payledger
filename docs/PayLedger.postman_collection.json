@@ -1,0 +1,208 @@
+{
+  "info": {
+    "_postman_id": "bba3ed13-b260-4f2b-922e-d38e6b06f84b",
+    "name": "PayLedger",
+    "description": "PayLedger API: register, login, deposit, idempotent transfer, transaction history.  \nEnvironment variables needed: baseUrl, tokenA, tokenB, emailB.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "51325638",
+    "_collection_link": "https://go.postman.co/collection/51325638-bba3ed13-b260-4f2b-922e-d38e6b06f84b?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Register Alice",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.environment.set(\"tokenA\", pm.response.json().token);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Alice\",\"email\":\"alice1@payledger.com\",\"password\":\"Test@1234\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/register",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Register Bob",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.environment.set(\"tokenB\", pm.response.json().token);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"name\":\"Bob\",\"email\":\"bob1@payledger.com\",\"password\":\"Test@1234\"}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/auth/register",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "auth",
+            "register"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Wallet- Alice",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Deposit (Alice)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{tokenA}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Idempotency-Key",
+            "value": "dep-100"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"amount\": 1000}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/wallet/deposit",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "wallet",
+            "deposit"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Transfer (Alice to Bob)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{tokenA}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Idempotency-Key",
+            "value": "trf-100"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"toEmail\": \"{{emailB}}\", \"amount\": 300}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/api/transfers",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "api",
+            "transfers"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Balances check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Transaction history",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": ""
+        }
+      },
+      "response": []
+    }
+  ]
+}

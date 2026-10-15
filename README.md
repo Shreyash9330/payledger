@@ -38,7 +38,7 @@ a consistent order prevents deadlocks.
 ![Pessimistic](docs/images/concurrency-pessimistic.png)
 ![Ledger](docs/images/ledger.png)
 
-## API
+## API  
 | Method | Endpoint | Description |
 |---|---|---|
 | POST | /api/auth/register | Register, returns JWT |
@@ -61,4 +61,6 @@ Configuration is read from environment variables with local defaults:
 `DB_URL`, `DB_USER`, `DB_PASSWORD`, `JWT_SECRET`. Set your own `JWT_SECRET` in production.
 
 ## Author
-Shreyash Gawande · [GitHub](https://github.com/Shreyash9330) · [LinkedIn](https://linkedin.com/in/shreyash-gawande9330)
+Shreyash Gawande 
+· [GitHub](https://github.com/Shreyash9330) 
+· [LinkedIn](https://linkedin.com/in/shreyash-gawande9330)

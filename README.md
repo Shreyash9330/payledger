@@ -51,6 +51,8 @@ a consistent order prevents deadlocks.
 Import `docs/PayLedger.postman_collection.json` into Postman and create an environment with
 `baseUrl`, `tokenA`, `tokenB`, `emailB`.
 
+![Transfer response](docs/images/postman.png)
+
 ## Run locally
 1. Start PostgreSQL:
    `docker run --name payledger-db -e POSTGRES_PASSWORD=secret -e POSTGRES_DB=payledger -p 5433:5432 -d postgres:16`

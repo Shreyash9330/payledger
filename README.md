@@ -3,7 +3,7 @@
 A Spring Boot REST API for a digital wallet with a double-entry ledger, idempotent
 transfers and concurrency-safe balance updates.
 
-**Live demo:** _coming soon_ (free hosting, first request may take ~30s)
+**Live demo:** https://payledger-m2bg.onrender.com (free hosting: first request after idle may take 1-2 minutes)
 
 ## Features
 - JWT authentication (register, login, BCrypt password hashing)

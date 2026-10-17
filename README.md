@@ -63,6 +63,6 @@ Configuration is read from environment variables with local defaults:
 `DB_URL`, `DB_USER`, `DB_PASSWORD`, `JWT_SECRET`. Set your own `JWT_SECRET` in production.
 
 ## Author
-Shreyash Gawande 
+Shreyash Gawande :
 · [GitHub](https://github.com/Shreyash9330) 
 · [LinkedIn](https://linkedin.com/in/shreyash-gawande9330)

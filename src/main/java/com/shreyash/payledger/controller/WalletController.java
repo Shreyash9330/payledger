@@ -6,22 +6,23 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
 import com.shreyash.payledger.dto.WalletResponse;
 import com.shreyash.payledger.entity.Wallet;
 import com.shreyash.payledger.repository.WalletRepository;
 
 @RestController
 @RequestMapping("/api/wallet")
-public class WalletController {
+public class WalletController 
+{
     private final WalletRepository walletRepository;
-
-    public WalletController(WalletRepository walletRepository) {
+    public WalletController(WalletRepository walletRepository)
+    {
         this.walletRepository = walletRepository;
     }
 
     @GetMapping
-    public WalletResponse myWallet(Authentication auth) {
+    public WalletResponse myWallet(Authentication auth)
+    {
         Wallet w = walletRepository.findByUserEmail(auth.getName())
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Wallet not found"));
         return new WalletResponse(w.getId(), w.getBalance(), w.getCurrency());
